@@ -1,0 +1,8 @@
+<nav>
+	<ul class="navMain cx">
+		<li><a href="/">Top</a></li>
+		<li><a href="/content1/">Content1</a></li>
+		<li><a href="/content2/">Content2</a></li>
+		<li><a href="/content3/">Content3</a></li>
+	</ul>
+</nav>

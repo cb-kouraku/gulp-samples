@@ -1,5 +1,8 @@
 gulp = require 'gulp'
 browserSync = require 'browser-sync'
+connectSSI = require 'connect-ssi'
+plumber = require 'gulp-plumber'
+replace = require 'gulp-replace'
 
 # 基本パス設定
 paths =
@@ -11,6 +14,14 @@ gulp.task 'browser-sync', ->
 		server:
 			# ルートを指定します
 			baseDir: paths.pub
+			# middlewareを使う設定
+			middleware: [
+				# SSIの設定情報
+				connectSSI(
+					baseDir: __dirname + '/htdocs'
+					ext: '.html'
+				)
+			]
 		# gulp起動時に開くページを指定します
 		startPath: 'index.html'
 		# ポートを指定します（デフォルトは3000）
@@ -31,6 +42,24 @@ gulp.task 'watch', ->
 # リロード
 gulp.task 'reload', ->
 	browserSync.reload()
+	return
+
+# SSI Code Change : file -> virtual
+gulp.task 'ssiChangeVirtual', ->
+	gulp
+	.src paths.pub+'**/*.html'
+	.pipe plumber()
+	.pipe replace(/<!--#include file/g, '<!--#include virtual')
+	.pipe gulp.dest paths.pub
+	return
+
+# SSI Code Change : virtual -> file
+gulp.task 'ssiChangeFile', ->
+	gulp
+	.src paths.pub+'**/*.html'
+	.pipe plumber()
+	.pipe replace(/<!--#include virtual/g, '<!--#include file')
+	.pipe gulp.dest paths.pub
 	return
 
 # 以下コマンド -----------------------------
