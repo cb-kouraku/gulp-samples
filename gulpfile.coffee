@@ -1,8 +1,15 @@
 gulp = require 'gulp'
-browserSync = require 'browser-sync'
-connectSSI = require 'connect-ssi'
-plumber = require 'gulp-plumber'
-replace = require 'gulp-replace'
+# gulp- 系のプラグインを plugins.xxxx で利用する(ハイフン付モジュール名はキャメルケース)
+plugins = require('gulp-load-plugins')(
+	pattern: [
+		'gulp-*'
+		'gulp.*'
+	]
+	replaceString: /\bgulp[\-.]/)
+
+# gulp- 系以外のモジュール
+plugins.browserSync = require 'browser-sync'
+plugins.connectSSI = require 'connect-ssi'
 
 # 基本パス設定
 paths =
@@ -10,14 +17,14 @@ paths =
 
 # BrowserSyncの設定
 gulp.task 'browser-sync', ->
-	browserSync.init
+	plugins.browserSync.init
 		server:
 			# ルートを指定します
 			baseDir: paths.pub
 			# middlewareを使う設定
 			middleware: [
 				# SSIの設定情報
-				connectSSI(
+				plugins.connectSSI(
 					baseDir: __dirname + '/htdocs'
 					ext: '.html'
 				)
@@ -41,15 +48,15 @@ gulp.task 'watch', ->
 
 # リロード
 gulp.task 'reload', ->
-	browserSync.reload()
+	plugins.browserSync.reload()
 	return
 
 # SSI Code Change : file -> virtual
 gulp.task 'ssiChangeVirtual', ->
 	gulp
 	.src paths.pub+'**/*.html'
-	.pipe plumber()
-	.pipe replace(/<!--#include file/g, '<!--#include virtual')
+	.pipe plugins.plumber()
+	.pipe plugins.replace(/<!--#include file/g, '<!--#include virtual')
 	.pipe gulp.dest paths.pub
 	return
 
@@ -57,8 +64,8 @@ gulp.task 'ssiChangeVirtual', ->
 gulp.task 'ssiChangeFile', ->
 	gulp
 	.src paths.pub+'**/*.html'
-	.pipe plumber()
-	.pipe replace(/<!--#include virtual/g, '<!--#include file')
+	.pipe plugins.plumber()
+	.pipe plugins.replace(/<!--#include virtual/g, '<!--#include file')
 	.pipe gulp.dest paths.pub
 	return
 
