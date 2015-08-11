@@ -1,0 +1,10 @@
+{
+	"server": {
+		"startPath": "index.html",
+		"port": 3040,
+		"open": "external"
+	},
+	"paths": {
+		"pub": "htdocs/"
+	}
+}
