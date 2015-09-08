@@ -5,6 +5,7 @@
 		"open": "external"
 	},
 	"paths": {
-		"pub": "htdocs/"
+		"pub": "htdocs/",
+		"src": "src/"
 	}
 }
