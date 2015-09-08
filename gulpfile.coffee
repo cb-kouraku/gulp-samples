@@ -28,5 +28,6 @@ require './gulptasks/taskload'
 
 gulp.task 'default', [
 	'browser-sync'
+	'html-extend'
 	'watch'
 ]
